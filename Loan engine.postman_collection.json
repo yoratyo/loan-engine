@@ -1,0 +1,250 @@
+{
+	"info": {
+		"_postman_id": "4e9a2efc-4f47-4772-8944-9728443071a2",
+		"name": "Loan engine",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "552551"
+	},
+	"item": [
+		{
+			"name": "metrics",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/metrics",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"metrics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create loans",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Save active_loan_id to collection scope if response is 201\", function () {",
+							"    // Check if the status code is 201",
+							"    pm.response.to.have.status(201);",
+							"",
+							"    // Parse the response JSON",
+							"    const response = pm.response.json();",
+							"",
+							"    // Validate the response structure",
+							"    pm.expect(response).to.have.property(\"status\", \"success\");",
+							"    pm.expect(response).to.have.property(\"data\");",
+							"",
+							"    // Save the active_loan_id to a collection variable",
+							"    pm.collectionVariables.set(\"active_loan_id\", response.data);",
+							"    console.log(\"active_loan_id saved to collection scope:\", response.data);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{auth_password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{auth_username}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"borrower_id\": \"126\",\n    \"principal_amount\": 500000,\n    \"rate\": 25,\n    \"roi\": 100000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/api/v1/loans",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"loans"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Approve loans",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{auth_password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{auth_username}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"validator_id\": \"abc\",\n    \"proof_image_url\": \"image\",\n    \"approval_date\": \"2024-12-05T15:30:00Z\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/api/v1/loans/{{active_loan_id}}/approve",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"loans",
+						"{{active_loan_id}}",
+						"approve"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Investment",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{auth_password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{auth_username}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"investor_id\": \"abf\",\n    \"name\": \"investor C\",\n    \"email\": \"yorar03@gmail.com\",\n    \"amount\": 10000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/api/v1/loans/{{active_loan_id}}/investments",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"loans",
+						"{{active_loan_id}}",
+						"investments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Disburse funds",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{auth_password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{auth_username}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"officer_id\": \"abc\",\n    \"agreement_letter_url\": \"image\",\n    \"disbursement_date\": \"2024-12-05T15:30:00Z\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/api/v1/loans/{{active_loan_id}}/disburse",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"loans",
+						"{{active_loan_id}}",
+						"disburse"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "active_loan_id",
+			"value": "55c17f6b-07cd-4b1a-85d0-93bd42635a34"
+		},
+		{
+			"key": "auth_username",
+			"value": "user"
+		},
+		{
+			"key": "auth_password",
+			"value": "123456"
+		}
+	]
+}

@@ -93,20 +93,3 @@ func main() {
 
 	log.Println("Server exiting")
 }
-
-// Key Feature:
-// - State Machine,
-// - State Movement Tracker,
-// - Optimistic Locking,
-// - Atomic Transaction
-// - Basic auth
-// - Migration DB script
-// - metric monitoring, prometheus
-// - email notification, sendgrid
-// - file generation, gopdf
-// - file hosting, file.io
-
-// Out of scope:
-// - Handling proof file for approval and disbursement process, assumptions if Client already sent valid URL
-// - Rate & ROI calculation, assumptions if it's already calculate when proposed a loan
-// - Not handling master data borrower, investor and employee, just add identifier in loan transaction as reference
